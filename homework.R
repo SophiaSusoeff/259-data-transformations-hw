@@ -6,6 +6,8 @@
 ### SETUP: RUN THIS BEFORE STARTING ----------
 
 #Load packages
+install.packages("tidyverse")
+
 library(tidyverse)
 ds <- read_csv("data_raw/rolling_stone_500.csv")
   
@@ -17,6 +19,14 @@ ds <- read_csv("data_raw/rolling_stone_500.csv")
 
 #ANSWER
 
+View(ds)
+glimpse(ds$Year)
+
+ds$Year <- as.numeric(ds$Year)  #this gave me the output: "NAs introduced by coercion," but there were no NAs when I viewed the data. I'm not sure why I got the warning message if it didn't actually happen.
+View(ds)
+str(ds)
+
+typeof(ds$Year)
 
 ### Question 2 ---------- 
 
@@ -24,6 +34,9 @@ ds <- read_csv("data_raw/rolling_stone_500.csv")
 # change ds so that all of the variables are lowercase
 
 #ANSWER
+
+ds <- ds %>% rename_with(tolower)
+View(ds)
 
 ### Question 3 ----------
 
@@ -33,11 +46,17 @@ ds <- read_csv("data_raw/rolling_stone_500.csv")
 
 #ANSWER
 
+ds <- ds %>% mutate(decade = floor(year / 10) * 10)
+View(ds)
+
 ### Question 4 ----------
 
 # Sort the dataset by rank so that 1 is at the top
 
 #ANSWER
+
+ds <- ds %>% arrange(rank)
+View(ds)
 
 ### Question 5 ----------
 
@@ -46,6 +65,8 @@ ds <- read_csv("data_raw/rolling_stone_500.csv")
 
 #ANSWER
 
+top10 <- ds %>% filter(rank < 11) %>% select(song, artist)
+View(top10)
 
 ### Question 6 ----------
 
@@ -54,6 +75,10 @@ ds <- read_csv("data_raw/rolling_stone_500.csv")
 
 #ANSWER
 
+ds_sum <- ds %>% summarize(earliest = min(year, na.rm = T), most_recent = max(year, na.rm = T), mean = mean(year, na.rm = T))
+
+print(ds_sum)
+View(ds_sum)
 
 ### Question 7 ----------
 
@@ -62,6 +87,9 @@ ds <- read_csv("data_raw/rolling_stone_500.csv")
 # Use one filter command only, and sort the responses by year
 
 #ANSWER
+ds_sum_artist_song <- ds %>% filter(year == 1879 | year == 2020 | year == 1980) %>% arrange(year)
+View(ds_sum_artist_song)
+  
 
 
 ### Question 8 ---------- 
@@ -73,6 +101,7 @@ ds <- read_csv("data_raw/rolling_stone_500.csv")
 # find the correct oldest, averag-ist, and most recent songs
 
 #ANSWER
+ds_sum <- ds %>% summarize(earliest = min(year, na.rm = T), most_recent = max(year, na.rm = T), mean = mean(year, na.rm = T)) %>% mutate()
 
 
 ### Question 9 ---------
